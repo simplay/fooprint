@@ -1,7 +1,7 @@
 # Fooprint
 
 **Fooprint** printe instruction script.
-Rubynopoly is licensed under the [MIT License](http://opensource.org/licenses/MIT).
+Fooprint is licensed under the [MIT License](http://opensource.org/licenses/MIT).
 
 ## Installation
 Assuming you have successfully installed **ruby**, **rvm** and **ruby-gems** you only have to clone this repository, browse into its root directory and then simply run ````bundle````.
