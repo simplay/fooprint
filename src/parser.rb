@@ -56,12 +56,20 @@ class Parser
   def even_odd_half_of(splits)
     odd = splits.select.with_index{|_,i| (i+1) % 2 == 1}
     even = splits.select.with_index{|_,i| (i+1) % 2 == 0}
+    # necessary to reverse order of 2nd half
+    # otherwise someone would have to manually reverse
+    # all the printed pages after having printed
+    # the first half of the document.
+    even.reverse!
     [odd, even]
   end
-  
+
+  # Get stringified printer/instruction for splits
+  # @param splits [Array] collection of pages per sheet.
+  # @return [String] printer-instruction for last tuple of slits
   def parsed_range(splits)
     last_tuple = splits.pop
-    body_of(splits)+head_of(last_tuple)
+    body_of(splits) + head_of(last_tuple)
   end
 
   # Get stringified printer/instruction for last split :last_tuple in splits
@@ -69,17 +77,25 @@ class Parser
   # @return [String] printer-instruction for last tuple of slits
   def head_of(last_tuple)
     tmp = "#{last_tuple.first}"
-    tmp += "-#{last_tuple.last.to_s}" if(last_tuple.count > 1)
+    tmp += "-#{last_tuple.last}" if(last_tuple.count > 1)
     tmp   
   end
 
+  # Get stringified printer/instruction for given splits
+  # @param splits [Array] collection of pages per sheet without head
+  # @return [String] printer-instruction for last tuple of slits
+  #                  or '' if splits is empty
   def body_of(splits)
     (splits.empty?) ? '' : partial_instruction_of(splits)
   end
 
+  # proceeds slits like they were head elements relying on Parser#head_of
+  # @param splits [Array] collection of pages per sheet without head
+  # @return [String] printer-instruction for last tuple of slits
   def partial_instruction_of(splits)
-    splits.inject('') do |string, subrange|
-      "#{string}#{subrange.first.to_s}-#{subrange.last.to_s};"
+    splits.inject('') do |string, sub_range|
+      "#{string}#{head_of(sub_range)};"
     end
   end
+
 end
